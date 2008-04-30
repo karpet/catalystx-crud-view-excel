@@ -5,7 +5,7 @@ use strict;
 use base qw( Catalyst::View::Excel::Template::Plus CatalystX::CRUD );
 use Path::Class;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 NAME
 
@@ -172,13 +172,13 @@ sub results_template {
      [% myfields = c.controller.field_names %]
       <row>
      [% FOR fn = myfields %]
-       <bold><cell>[% fn %]</cell></bold>
+       <bold><cell>[% fn | html %]</cell></bold>
      [% END %]
       </row>
      [% FOR r = results.results %]
       <row>
          [% FOR fn = myfields %]
-          <cell>[% r.\$fn %]</cell>
+          <cell>[% r.\$fn | html %]</cell>
          [% END %]
       </row>
      [% END %]
