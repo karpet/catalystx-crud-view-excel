@@ -2,7 +2,10 @@ package CatalystX::CRUD::View::Excel;
 
 use warnings;
 use strict;
-use base qw( Catalyst::View::Excel::Template::Plus CatalystX::CRUD );
+use base qw( 
+    Catalyst::View::Excel::Template::Plus 
+    CatalystX::CRUD 
+);
 use Path::Class;
 
 our $VERSION = '0.04';
@@ -167,6 +170,13 @@ sub results_template {
     my ( $self, $c ) = @_;
 
     my $tmpl = <<TT;
+[% BLOCK make_row %]
+      <row>
+         [% FOR fn = myfields %]
+          <cell>[% r.\$fn | html %]</cell>
+         [% END %]
+      </row>
+[% END %]
 <workbook>
     <worksheet name="[% c.controller.model_name.replace('\\W+','_') %]">
      [% myfields = c.controller.field_names %]
@@ -175,13 +185,16 @@ sub results_template {
        <bold><cell>[% fn | html %]</cell></bold>
      [% END %]
       </row>
-     [% FOR r = results.results %]
-      <row>
-         [% FOR fn = myfields %]
-          <cell>[% r.\$fn | html %]</cell>
-         [% END %]
-      </row>
-     [% END %]
+     [% IF results.iterator;
+            WHILE (r = results.iterator.next);
+                PROCESS make_row;
+            END;
+        ELSE;
+            FOR r = results.results;
+                PROCESS make_row;
+            END;
+        END;
+     %]
     </worksheet>
 </workbook>
 TT
