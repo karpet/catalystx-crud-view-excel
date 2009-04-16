@@ -9,7 +9,7 @@ use base qw(
 use Class::C3;
 use Path::Class;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 NAME
 
