@@ -6,7 +6,8 @@ use base qw(
     Catalyst::View::Excel::Template::Plus
     CatalystX::CRUD
 );
-use Class::C3;
+use MRO::Compat;
+use mro 'c3';
 use Path::Class;
 
 our $VERSION = '0.07';
